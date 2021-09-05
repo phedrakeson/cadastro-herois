@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de herois</title>
+  <link href="./assets/css/fontawesome.min.css" rel="stylesheet">
+  <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="./assets/css/styles.css" rel="stylesheet">
+  <script src="./assets/js/bootstrap.bundle.min.js"></script>
+  <script src="./assets/js/jquery-3.6.0.min.js"></script>
+  <script src="./assets/js/axios.min.js"></script>
+  <script src="./assets/js/index.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="alert alert-success" id="alert-success" role="alert"></div>
+    <div class="alert alert-danger" id="alert-error" role="alert"></div>
+
+    <div class="header">
+      <div>
+        <h2 class="display-6 title">Herois cadastrados</h2>
+      </div>
+      <div>
+        <button type="button" class="btn btn-primary" id="btn-novo-heroi" data-bs-toggle="modal"
+          data-bs-target="#novoHeroiModal">
+          Cadastrar Herói
+        </button>
+      </div>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Nome</th>
+          <th scope="col">Poderes</th>
+          <th scope="col">Fraquezas</th>
+          <th scope="col">Raça</th>
+          <th scope="col">Ações</th>
+        </tr>
+      </thead>
+      <tbody id="list"></tbody>
+    </table>
+  </div>
+
+  <div class="modal fade" id="novoHeroiModal" tabindex="-1" aria-labelledby="novoHeroiModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="novoHeroiModalLabel">Novo Herói</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger" role="alert" id="novo-error">
+            Preencha todos os campos*
+          </div>
+
+          <form id="heroi-form">
+            <div class="row">
+              <div class="col">
+                <label>
+                  <span>Nome*:</span>
+                  <input type="text" class="form-control" id="salvar-nome">
+                </label>
+              </div>
+
+              <div class="col">
+                <label>
+                  <span>Poderes*:</span>
+                  <input type="text" class="form-control" id="salvar-poderes">
+                </label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <span>Fraquezas*:</span>
+                <input type="text" class="form-control" id="salvar-fraquezas">
+              </div>
+
+              <div class="col">
+                <label>
+                  <span>Raça*:</span>
+                  <input type="text" class="form-control" id="salvar-raca">
+                </label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label>
+                  <span>Filiação*:</span>
+                  <input type="text" class="form-control" id="salvar-filiacao">
+                </label>
+              </div>
+
+              <div class="col">
+                <span>Origem*:</span>
+                <input type="text" class="form-control" id="salvar-origem">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label>
+                  <span>Personalidade*:</span>
+                  <input type="text" class="form-control" id="salvar-personalidade">
+                </label>
+              </div>
+
+              <div class="col">
+                <span>Ocupação*:</span>
+                <input type="text" class="form-control" id="salvar-ocupacao">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <label class="full-width">
+                  <span>História*:</span>
+                  <textarea class="form-control textarea" rows="3" id="salvar-historia"></textarea>
+                </label>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" id="btn-salvar-heroi">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="editarHeroiModal" tabindex="-1" aria-labelledby="editarHeroiModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editarHeroiModalLabel">Editar Herói</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger" role="alert" id="editar-error">
+            Preencha todos os campos*
+          </div>
+
+          <form id="heroi-form">
+            <input type="hidden" id="editar-id">
+            <div class="row">
+              <div class="col">
+                <label>
+                  <span>Nome*:</span>
+                  <input id="editar-nome" type="text" class="form-control">
+                </label>
+              </div>
+
+              <div class="col">
+                <label>
+                  <span>Poderes*:</span>
+                  <input id="editar-poderes" type="text" class="form-control">
+                </label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <span>Fraquezas*:</span>
+                <input id="editar-fraquezas" type="text" class="form-control">
+              </div>
+
+              <div class="col">
+                <label>
+                  <span>Raça*:</span>
+                  <input id="editar-raca" type="text" class="form-control">
+                </label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label>
+                  <span>Filiação*:</span>
+                  <input id="editar-filiacao" type="text" class="form-control">
+                </label>
+              </div>
+
+              <div class="col">
+                <span>Origem*:</span>
+                <input id="editar-origem" type="text" class="form-control">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label>
+                  <span>Personalidade*:</span>
+                  <input id="editar-personalidade" type="text" class="form-control">
+                </label>
+              </div>
+
+              <div class="col">
+                <span>Ocupação*:</span>
+                <input id="editar-ocupacao" type="text" class="form-control">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <label class="full-width">
+                  <span>História*:</span>
+                  <textarea id="editar-historia" class="form-control textarea" rows="3"></textarea>
+                </label>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" id="btn-editar-heroi">Editar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
