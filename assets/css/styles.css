@@ -1,0 +1,29 @@
+.alert-success,
+.alert-danger {
+  display: none;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container {
+  margin-top: 30px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.row {
+  margin-bottom: 10px;
+}
+
+th,
+tr {
+  vertical-align: middle;
+}
