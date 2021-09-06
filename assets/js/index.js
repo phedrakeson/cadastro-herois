@@ -1,15 +1,14 @@
-const API_BASE_PATH = 'https://cadastro-herois-api.herokuapp.com';
-
 (function () {
   const reloadList = () => {
     $('#list').empty();
 
-    axios.get(`${API_BASE_PATH}/herois`)
+    axios.get('./api/lista_herois.php')
       .then(({ data }) => {
         data.forEach(heroi => {
           $('#list').append(`
             <tr>
               <input type="hidden" name="id" value="${heroi.id}">
+              <td>${heroi.id}</td>
               <td>${heroi.nome}</td>
               <td>${heroi.poderes}</td>
               <td>${heroi.fraquezas}</td>
@@ -39,18 +38,19 @@ const API_BASE_PATH = 'https://cadastro-herois-api.herokuapp.com';
           event.preventDefault();
           const rowID = $(event.target).closest('tr').find('input[name="id"]').val();
 
-          axios.get(`${API_BASE_PATH}/heroi/${rowID}`)
+          axios.get(`api/obter_heroi.php?id=${rowID}`)
             .then(({ data }) => {
+              const profile = data[0];
               $('#editar-id').val(rowID);
-              $('#editar-nome').val(data.nome).prop('disabled', false);
-              $('#editar-poderes').val(data.poderes).prop('disabled', false);
-              $('#editar-fraquezas').val(data.fraquezas).prop('disabled', false);
-              $('#editar-raca').val(data.raca).prop('disabled', false);
-              $('#editar-filiacao').val(data.filiacao).prop('disabled', false);
-              $('#editar-origem').val(data.origem).prop('disabled', false);
-              $('#editar-personalidade').val(data.personalidade).prop('disabled', false);
-              $('#editar-ocupacao').val(data.ocupacao).prop('disabled', false);
-              $('#editar-historia').val(data.historia).prop('disabled', false);
+              $('#editar-nome').val(profile.nome).prop('disabled', false);
+              $('#editar-poderes').val(profile.poderes).prop('disabled', false);
+              $('#editar-fraquezas').val(profile.fraquezas).prop('disabled', false);
+              $('#editar-raca').val(profile.raca).prop('disabled', false);
+              $('#editar-filiacao').val(profile.filiacao).prop('disabled', false);
+              $('#editar-origem').val(profile.origem).prop('disabled', false);
+              $('#editar-personalidade').val(profile.personalidade).prop('disabled', false);
+              $('#editar-ocupacao').val(profile.ocupacao).prop('disabled', false);
+              $('#editar-historia').val(profile.historia).prop('disabled', false);
               $('#editarHeroiModal').modal('toggle');
             })
         });
@@ -60,7 +60,7 @@ const API_BASE_PATH = 'https://cadastro-herois-api.herokuapp.com';
           const rowID = $(event.target).closest('tr').find('input[name="id"]').val();
           const name = $(event.target).closest('tr').find('td:nth-child(2)').text();
 
-          axios.delete(`${API_BASE_PATH}/heroi/${rowID}`)
+          axios.delete(`api/remover_heroi.php?id=${rowID}`)
             .then(({ data }) => {
               if (data.ok) {
                 $('#alert-success').text(`Heroi (${name}) removido com sucesso!`);
@@ -85,18 +85,19 @@ const API_BASE_PATH = 'https://cadastro-herois-api.herokuapp.com';
           const rowID = $(event.target).closest('tr').find('input[name="id"]').val();
           const modalTitle = $('#editarHeroiModalLabel').text();
 
-          axios.get(`${API_BASE_PATH}/heroi/${rowID}`)
+          axios.get(`api/obter_heroi.php?id=${rowID}`)
             .then(({ data }) => {
+              const profile = data[0];
               $('#editar-id').val(rowID);
-              $('#editar-nome').val(data.nome).prop('disabled', true);
-              $('#editar-poderes').val(data.poderes).prop('disabled', true);
-              $('#editar-fraquezas').val(data.fraquezas).prop('disabled', true);
-              $('#editar-raca').val(data.raca).prop('disabled', true);
-              $('#editar-filiacao').val(data.filiacao).prop('disabled', true);
-              $('#editar-origem').val(data.origem).prop('disabled', true);
-              $('#editar-personalidade').val(data.personalidade).prop('disabled', true);
-              $('#editar-ocupacao').val(data.ocupacao).prop('disabled', true);
-              $('#editar-historia').val(data.historia).prop('disabled', true);
+              $('#editar-nome').val(profile.nome).prop('disabled', true);
+              $('#editar-poderes').val(profile.poderes).prop('disabled', true);
+              $('#editar-fraquezas').val(profile.fraquezas).prop('disabled', true);
+              $('#editar-raca').val(profile.raca).prop('disabled', true);
+              $('#editar-filiacao').val(profile.filiacao).prop('disabled', true);
+              $('#editar-origem').val(profile.origem).prop('disabled', true);
+              $('#editar-personalidade').val(profile.personalidade).prop('disabled', true);
+              $('#editar-ocupacao').val(profile.ocupacao).prop('disabled', true);
+              $('#editar-historia').val(profile.historia).prop('disabled', true);
               $('#editarHeroiModal').modal('toggle');
             })
 
@@ -132,7 +133,7 @@ const API_BASE_PATH = 'https://cadastro-herois-api.herokuapp.com';
       };
 
       if (!Object.values(campos).some(item => item === "")) {
-        axios.post(`${API_BASE_PATH}/novo`, campos)
+        axios.post('api/novo_heroi.php', campos)
           .then(({ data }) => {
             if (data.ok) {
               $('#alert-success').text(`Heroi (${campos.nome}) salvo com sucesso!`);
@@ -179,7 +180,7 @@ const API_BASE_PATH = 'https://cadastro-herois-api.herokuapp.com';
       };
 
       if (!Object.values(campos).some(item => item === "")) {
-        axios.post(`${API_BASE_PATH}/heroi/${rowID}`, campos)
+        axios.post(`api/atualizar_heroi.php?id=${rowID}`, campos)
           .then(({ data }) => {
             if (data.ok) {
               $('#alert-success').text(`Heroi (${campos.nome}) alterado com sucesso!`);
