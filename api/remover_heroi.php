@@ -10,11 +10,10 @@
   try {
     $heroiId = $_GET['id'];
     DB::delete('herois', 'id=%s', $heroiId);
-
     $response = array('ok' => true);
     echo json_encode($response);
   } catch (Exception $e) {
-    $error = array('ok' => true, 'error' => $e->getMessage());
+    $error = array('ok' => false, 'error' => $e->getMessage());
     echo json_encode($error);
   }
 ?>

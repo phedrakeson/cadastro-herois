@@ -7,7 +7,12 @@
   header('Access-Control-Allow-Origin: *');
   header('Content-type: application/json');
 
-  $heroiId = $_GET['id'];
-  $profile = DB::query("SELECT * FROM herois WHERE id=%i", $heroiId);
-  echo json_encode($profile);
+  try {
+    $heroiId = $_GET['id'];
+    $profile = DB::queryFirstRow("SELECT * FROM herois WHERE id=%i", $heroiId);
+    echo json_encode($profile);
+  } catch (Exception $e) {
+    $error = array('ok' => false, 'error' => $e->getMessage());
+    echo json_encode($error);
+  }
 ?>

@@ -40,7 +40,9 @@
 
           axios.get(`api/obter_heroi.php?id=${rowID}`)
             .then(({ data }) => {
-              const profile = data[0];
+              const profile = data || {};
+              console.log(data);
+
               $('#editar-id').val(rowID);
               $('#editar-nome').val(profile.nome).prop('disabled', false);
               $('#editar-poderes').val(profile.poderes).prop('disabled', false);
@@ -58,7 +60,7 @@
         $('.btn-delete').on('click', function (event) {
           event.preventDefault();
           const rowID = $(event.target).closest('tr').find('input[name="id"]').val();
-          const name = $(event.target).closest('tr').find('td:nth-child(2)').text();
+          const name = $(event.target).closest('tr').find('td:nth-child(3)').text();
 
           axios.delete(`api/remover_heroi.php?id=${rowID}`)
             .then(({ data }) => {
@@ -87,7 +89,7 @@
 
           axios.get(`api/obter_heroi.php?id=${rowID}`)
             .then(({ data }) => {
-              const profile = data[0];
+              const profile = data || {};
               $('#editar-id').val(rowID);
               $('#editar-nome').val(profile.nome).prop('disabled', true);
               $('#editar-poderes').val(profile.poderes).prop('disabled', true);

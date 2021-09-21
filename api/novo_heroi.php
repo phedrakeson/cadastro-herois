@@ -7,9 +7,9 @@
   header('Access-Control-Allow-Origin: *');
   header('Content-type: application/json');
 
-  $data = json_decode(file_get_contents('php://input'));
-
   try {
+    $data = json_decode(file_get_contents('php://input'));
+
     DB::insert('herois', [
       'nome' => $data->nome,
       'poderes' => $data->poderes,
@@ -25,7 +25,7 @@
     $response = array('ok' => true);
     echo json_encode($response);
   } catch (Exception $e) {
-    $error = array('ok' => true, 'error' => $e->getMessage());
+    $error = array('ok' => false, 'error' => $e->getMessage());
     echo json_encode($error);
   }
 ?>

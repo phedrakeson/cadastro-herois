@@ -6,7 +6,12 @@
 
   header('Access-Control-Allow-Origin: *');
   header('Content-type: application/json');
-  $results = DB::query("SELECT * FROM herois");
 
-  echo json_encode($results);
+  try {
+    $results = DB::query("SELECT * FROM herois");
+    echo json_encode($results);
+  } catch (Exception $e) {
+    $error = array('ok' => false, 'error' => $e->getMessage());
+    echo json_encode($error);
+  }
 ?>
